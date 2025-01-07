@@ -1,46 +1,34 @@
-## Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
+# BEX Dropship Dashboard  
 
-![license](https://img.shields.io/badge/license-MIT-blue.svg)
+The **BEX Dropship Dashboard** is a frontend application built to interact with the Strapi API, designed for managing dropshipping operations efficiently. It provides an intuitive interface for handling product data, orders, and seamless communication with the backend systems.  
 
-> Free React Admin Dashboard made with Material-UI components and React.
+## Features  
+- User-friendly dashboard for managing dropshipping workflows.  
+- Integration with the Strapi API for real-time updates and synchronization.  
+- Ability to view and manage product and order details.  
+- Secure authentication and role-based access for different users.  
+- Optimized for high performance and scalability.  
 
-![preview](public/assets/preview.jpg)
+## Technology Stack  
+- **Frontend**: Built using [React](https://reactjs.org/) (or specify if you're using another framework).  
+- **Backend**: Powered by the Strapi API.  
+- **Database**: MongoDB (via Strapi for storing product and order data).  
 
-## Demo
+## Architecture Overview  
+The **BEX Dropship** application serves as the frontend layer in the following architecture:  
 
-- [Dashboard Page](https://minimal-kit-react.vercel.app/)
-- [Users Page](https://minimal-kit-react.vercel.app/user)
-- [Products Page](https://minimal-kit-react.vercel.app/products)
-- [Blog Page](https://minimal-kit-react.vercel.app/blog)
-- [Login Page](https://minimal-kit-react.vercel.app/login)
-- [Not Found Page](https://minimal-kit-react.vercel.app/404)
+1. **Odoo**: The ERP system that handles core business processes, including inventory and order management.  
+2. **Strapi**: Middleware that acts as a proxy between the dashboard and Odoo, facilitating API requests.  
+3. **MongoDB**: Used by Strapi to store data such as user details and dropshipping configurations.  
 
-## Quick start
+### Flow:  
+Dropship Users → **BEX Dropship Dashboard** → Strapi → Odoo  
 
-- [Download from Github](https://github.com/minimal-ui-kit/material-kit-react/archive/refs/heads/main.zip) or clone the repo : `git clone https://github.com/minimal-ui-kit/material-kit-react.git`
-- Recommended `Node.js v18.x`.
-- **Install:** `yarn install`
-- **Start:** `yarn dev`
-- **Build:** `yarn build`
+This architecture enables efficient dropshipping operations while minimizing licensing costs by consolidating API interactions through a single Odoo user.  
 
-## Upgrade to PRO Version
-
-| Minimal Free     | [Minimal Pro](https://material-ui.com/store/items/minimal-dashboard/) |
-| :--------------- | :-------------------------------------------------------------------- |
-| **6** Demo Pages | **70+** Demo Pages                                                    |
-| -                | Authentication with **Amplify**, **Auth0**, **JWT** and **Firebase**  |
-| -                | [+More components](https://minimals.cc/components)                    |
-| -                | Dark & light mode                                                     |
-| -                | Next.js version                                                       |
-| -                | TypeScript version (Standard Plus and Extended license)               |
-| -                | Design Figma File (Standard Plus and Extended license)                |
-| -                | Complete Users Flows                                                  |
-| -                | Learn more: [Package & License](https://docs.minimals.cc/package)     |
-
-## License
-
-Distributed under the MIT License. See [LICENSE](https://github.com/minimal-ui-kit/minimal.free/blob/main/LICENSE.md) for more information.
-
-## Contact us
-
-Email: support@minimals.cc
+### Steps  
+1. git clone git@github.com:bexsunglasses/bex-dropship-backend.git
+2. cd bex-dropship-backend
+3. yarn install
+4. yarn dev
+5. When ready to deploy: **yarn build** then **yarn deploy**
