@@ -70,6 +70,9 @@ export default function OrderDetailView({
   const [notes, setNotes] = useState('');
   const [clientOrderRef, setClientOrderRef] = useState('');
 
+  const [shipTrackingNumber, setShipTrackingNumber] = useState('');
+  const [shipDate, setShipDate] = useState('');
+
   useEffect(() => {
     // Fetch order details from the API
     fetchOrder();
@@ -241,6 +244,8 @@ export default function OrderDetailView({
     .then(response => {
       console.log(response.data.data);
       setOrderName(response.data.data.name);
+      setShipTrackingNumber(response.data.data.ship_tracking_number);
+      setShipDate(response.data.data.ship_date);
       setDelivery(response.data.data.partner_shipping_id);
       setNotes(response.data.data.x_studio_notes);
       setClientOrderRef(response.data.data.client_order_ref ? response.data.data.client_order_ref : '');
@@ -326,6 +331,24 @@ export default function OrderDetailView({
             }}
           />
         </Stack>
+      )}
+      {/* Display tracking number */}
+      {shipTrackingNumber && ( // Display error message if authError state is not null
+        <>
+          <div style={{ margin: '16px 0' }} />
+          <Typography variant="body1">
+            <strong>Tracking #: </strong>{shipTrackingNumber}
+          </Typography>
+        </>
+      )}
+      {/* Display ship date */}
+      {shipDate && ( // Display error message if authError state is not null
+        <>
+          <div style={{ margin: '16px 0' }} />
+          <Typography variant="body1">
+            <strong>Ship Date: </strong>{shipDate}
+          </Typography>
+        </>
       )}
       {/* Display partner address and phone */}
       {delivery.name && ( // Display error message if authError state is not null
