@@ -4,7 +4,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // Import js-cookie for managing cookies
 
 import PropTypes from 'prop-types';
+import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
+import copyOutline from '@iconify-icons/eva/copy-outline';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
@@ -338,6 +340,14 @@ export default function OrderDetailView({
           <div style={{ margin: '16px 0' }} />
           <Typography variant="body1">
             <strong>Tracking #: </strong>{shipTrackingNumber}
+            <IconButton
+              onClick={() => {
+                navigator.clipboard.writeText(shipTrackingNumber);
+                alert('Tracking number copied to clipboard!');
+              }}
+            >
+              <Icon icon={copyOutline} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+            </IconButton>
           </Typography>
         </>
       )}
