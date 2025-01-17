@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // Import js-cookie for managing cookies
 
 // import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Stack,
+  Select,
+  MenuItem,
   FormControl
 } from '@mui/material';
 
@@ -23,6 +25,8 @@ import { useRouter } from 'src/routes/hooks';
 export default function NewCustomerView() {
 
   const router = useRouter();
+
+  const [countryStates, setCountryStates] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -41,12 +45,59 @@ export default function NewCustomerView() {
     company_name: ""
   });
 
+  const countryStatesRef = useRef(countryStates);
+
+  useEffect(() => {
+    // Fetch customers from the API
+    countryStatesRef.current = countryStates;
+    fetchCountryStates(countryStatesRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchCountryStates = (cst) => {
+    console.log('Fetching Countries and States')
+    const requestUrl = `${config.baseURL}/api-proxy/proxy?method=get&resource=countrystate`
+    console.log(requestUrl);
+    axios.get(requestUrl, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('jwt')}`, // Replace with your actual JWT token
+      }
+    })
+    .then(response => {
+      console.log(response.data.data);
+      setCountryStates([...cst,...response.data.data]);
+    })
+    .catch(error => {
+      console.error('Error fetching countries/states:', error);
+    });
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+
+    // Reset the state field if the country changes
+    if (name === "country") {
+      setFormData((prevData) => ({
+        ...prevData,
+        state: "",
+      }));
+    }
+  };
+
+  const renderStates = () => {
+    const selectedCountry = countryStates.find((country) => country.code === formData.country);
+    if (selectedCountry && selectedCountry.state_ids) {
+      return selectedCountry.state_ids.map((state) => (
+        <MenuItem key={state.code} value={state.code}>
+          {state.name}
+        </MenuItem>
+      ));
+    }
+    return null;
   };
 
   const handleCreateCustomer = () => {
@@ -120,14 +171,6 @@ export default function NewCustomerView() {
                 required
             />
             <TextField
-                label="State"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                fullWidth
-                required
-            />
-            <TextField
                 label="Zip"
                 name="zip"
                 value={formData.zip}
@@ -135,14 +178,38 @@ export default function NewCustomerView() {
                 fullWidth
                 required
             />
-            <TextField
-                label="Country"
-                name="country"
-                value={formData.country}
+            <Select
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              fullWidth
+              displayEmpty
+              required
+            >
+              <MenuItem value="" disabled>
+                Select a Country
+              </MenuItem>
+              {countryStates.map((country) => (
+                <MenuItem key={country.code} value={country.code}>
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+            {formData.country && (
+              <Select
+                name="state"
+                value={formData.state}
                 onChange={handleChange}
                 fullWidth
+                displayEmpty
                 required
-            />
+              >
+                <MenuItem value="" disabled>
+                  Select a State/Province
+                </MenuItem>
+                {renderStates()}
+              </Select>
+            )}
             <TextField
                 label="Email"
                 name="email"
