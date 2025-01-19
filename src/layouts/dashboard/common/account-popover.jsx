@@ -25,11 +25,6 @@ const MENU_OPTIONS = [
     url: '/', 
   },
   {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-    url: '/profile', 
-  },
-  {
     label: 'API Documentation',
     icon: 'eva:file-text-fill', // Replace with a relevant icon if available
     url: 'https://www.postman.com/opsician/bex/collection/umqzjyv/bex-dropship-api?action=share&creator=33962292', // Update this URL to the actual path for your API documentation
