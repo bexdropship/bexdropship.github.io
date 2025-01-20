@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'; // Import js-cookie for managing cookies
 import PropTypes from 'prop-types';
 import { useRef, useState, useEffect } from 'react';
 
+import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -157,7 +158,16 @@ export default function CustomerView({
     <Container>
       {showTitle && ( // Display error message if authError state is not null
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4">Shipping Addresses</Typography>
+          <Typography variant="h4">
+            Shipping Addresses
+            <Chip
+              label='Create'  // Directly use orderState for the label
+              color='primary'  // Customize the color based on the state
+              variant="outlined"  // Optional: Change to solid if you prefer
+              style={{ marginLeft: '10px' }}
+              onClick={() => router.push('/new-customer')}
+            />
+          </Typography>
         </Stack>
       )}
 
