@@ -60,12 +60,18 @@ export default function OrderView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchOrders = (pg, lm, ord, nm) => {
+  const fetchOrders = (pg, lm, ord, nm, or, orb) => {
     console.log('Fetching Orders')
     const normalizedPageNumber = pg + 1;
     let requestUrl = `${config.baseURL}/api-proxy/proxy?method=get&resource=orders&page=${normalizedPageNumber}&page_size=${lm}`
     if (nm) {
       requestUrl += `&name=${nm}`;
+    }
+    if (or) {
+      requestUrl += `&order=${or}`;
+    }
+    if (orb) {
+      requestUrl += `&orderby=${orb}`;
     }
     console.log(requestUrl);
     axios.get(requestUrl, {
@@ -84,12 +90,23 @@ export default function OrderView() {
   };
 
   const handleSort = (event, id) => {
+    console.log('Handling Sort')
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(id);
+      const newOrder = isAsc ? 'desc' : 'asc';
+      const newOrderBy = id;
+      setOrder(newOrder);
+      setOrderBy(newOrderBy);
+      getSorted(newOrder, newOrderBy);
     }
   };
+
+  const getSorted = (_order, _orderBy) => {
+    console.log(`Sorting ${_orderBy} ${_order}`)
+    setPage(0);
+    setMaxRecord(0);
+    fetchOrders(0, rowsPerPage, [], filterName, _order, _orderBy)
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

@@ -70,7 +70,7 @@ export default function CustomerView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchCustomers = (pg, lm, cst, nm, ft, pc) => {
+  const fetchCustomers = (pg, lm, cst, nm, ft, or, orb) => {
     console.log('Fetching Customers')
     const normalizedPageNumber = pg + 1;
     let requestUrl = `${config.baseURL}/api-proxy/proxy?method=get&resource=customers&page=${normalizedPageNumber}&page_size=${lm}`
@@ -79,6 +79,12 @@ export default function CustomerView({
     }
     if (ft) {
       requestUrl += `&type=${ft}`;
+    }
+    if (or) {
+      requestUrl += `&order=${or}`;
+    }
+    if (orb) {
+      requestUrl += `&orderby=${orb}`;
     }
     console.log(requestUrl);
     axios.get(requestUrl, {
@@ -97,13 +103,23 @@ export default function CustomerView({
   };
 
   const handleSort = (event, id) => {
-    console.log('sort', id)
+    console.log('Handling Sort')
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(id);
+      const newOrder = isAsc ? 'desc' : 'asc';
+      const newOrderBy = id;
+      setOrder(newOrder);
+      setOrderBy(newOrderBy);
+      getSorted(newOrder, newOrderBy);
     }
   };
+
+  const getSorted = (_order, _orderBy) => {
+    console.log(`Sorting ${_orderBy} ${_order}`)
+    setPage(0);
+    setMaxRecord(0);
+    fetchCustomers(0, rowsPerPage, [], filterName, filterType, _order, _orderBy)
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
