@@ -2,6 +2,7 @@ import config from 'src/config/config'; // Adjust the import path as necessary
 
 import axios from 'axios';
 import Cookies from 'js-cookie'; // Import js-cookie for managing cookies
+import { useLocation } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 
 import Chip from '@mui/material/Chip';
@@ -29,6 +30,7 @@ import OrderTableToolbar from '../order-table-toolbar';
 
 export default function OrderView() {
   const router = useRouter();
+  const location = useLocation();
 
   const [saleOrders, setSaleOrders] = useState([]);
 
@@ -53,13 +55,20 @@ export default function OrderView() {
 
   useEffect(() => {
     // Fetch orders from the API
+    const searchParams = new URLSearchParams(location.search);
+    const query = searchParams.get('search') || '';
     saleOrdersRef.current = saleOrders;
     rowsPerPageRef.current = rowsPerPage;
     pageRef.current = page;
-    filterNameRef.current = filterName;
-    fetchOrders(pageRef.current, rowsPerPageRef.current, saleOrdersRef.current, filterNameRef.current);
+    if (query) {
+      filterNameRef.current = query;
+    }else{
+      filterNameRef.current = filterName;
+    }
+    
+    fetchOrders(pageRef.current, rowsPerPageRef.current, [], filterNameRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location.search]);
 
   const fetchOrders = (pg, lm, ord, nm, or, orb) => {
     console.log('Fetching Orders')

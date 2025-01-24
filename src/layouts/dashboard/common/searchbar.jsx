@@ -8,6 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
+import { useRouter } from 'src/routes/hooks';
+
 import { bgBlur } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
@@ -40,14 +42,24 @@ const StyledSearchbar = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Searchbar() {
+
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleOpen = () => {
     setOpen(!open);
   };
 
+  const handleSearch = () => {
+    router.push(`/orders?search=${searchQuery}`);
+    handleClose();
+  };
+
   const handleClose = () => {
     setOpen(false);
+    // router.push(`/orders?search=${searchQuery}`);
   };
 
   return (
@@ -65,7 +77,8 @@ export default function Searchbar() {
               autoFocus
               fullWidth
               disableUnderline
-              placeholder="Search…"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search orders…"
               startAdornment={
                 <InputAdornment position="start">
                   <Iconify
@@ -76,7 +89,7 @@ export default function Searchbar() {
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
-            <Button variant="contained" onClick={handleClose}>
+            <Button variant="contained" onClick={handleSearch}>
               Search
             </Button>
           </StyledSearchbar>
